@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Forma della Terra - Scienze</title>
+    <title>Blockchain e Criptovalute - Raffaele Pannullo</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* Colori iper-tecnologici Liquid Glass */
+            /* Palette Liquid Glass */
             --glass-bg: rgba(255, 255, 255, 0.04);
             --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-highlight: rgba(255, 255, 255, 0.5);
+            --glass-highlight: rgba(255, 255, 255, 0.4);
             --accent-cyan: #00f2fe;
             --accent-purple: #9d00ff;
             --accent-blue: #0047ff;
@@ -24,65 +25,42 @@
         body, html {
             margin: 0; padding: 0;
             width: 100vw; height: 100vh;
-            overflow: hidden;
+            overflow: hidden; 
             background-color: var(--bg-deep);
             font-family: 'Inter', sans-serif;
             color: #ffffff;
             background-image: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #000000 100%);
-            perspective: 2000px; /* Prospettiva globale per il body */
         }
 
-        /* Griglia Olografica 3D di Sfondo */
-        .cyber-grid {
-            position: absolute;
-            width: 300%; height: 300%;
-            top: -100%; left: -100%;
-            background-image: 
-                linear-gradient(rgba(0, 242, 254, 0.08) 2px, transparent 2px),
-                linear-gradient(90deg, rgba(0, 242, 254, 0.08) 2px, transparent 2px);
-            background-size: 80px 80px;
-            transform: translateZ(-800px) rotateX(45deg);
-            z-index: -3;
-            opacity: 0.4;
-            pointer-events: none;
-            /* Animazione movimento griglia */
-            animation: gridMove 20s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 80px 80px; }
-        }
-
+        /* OTTIMIZZAZIONE PERFORMANCE (Anti-Lag) */
         .ambient-blob {
             position: absolute;
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            filter: blur(140px);
             z-index: -2;
-            opacity: 0.7;
-            animation: morph 15s infinite linear;
+            opacity: 0.6;
+            animation: floatBlob 20s infinite linear;
             will-change: transform;
         }
 
-        .blob-1 { width: 900px; height: 900px; background: var(--accent-blue); top: -20%; left: -10%; transform: translateZ(-400px); }
-        .blob-2 { width: 1000px; height: 1000px; background: var(--accent-purple); bottom: -30%; right: -10%; animation-delay: -5s; transform: translateZ(-500px); }
-        .blob-3 { width: 700px; height: 700px; background: var(--accent-cyan); top: 20%; left: 40%; animation-delay: -10s; mix-blend-mode: screen; opacity: 0.5; transform: translateZ(-300px);}
+        .blob-1 { width: 1200px; height: 1200px; background: radial-gradient(circle, rgba(0,71,255,0.4) 0%, rgba(0,71,255,0) 60%); top: -30%; left: -20%; }
+        .blob-2 { width: 1400px; height: 1400px; background: radial-gradient(circle, rgba(157,0,255,0.3) 0%, rgba(157,0,255,0) 60%); bottom: -40%; right: -20%; animation-delay: -5s; }
+        .blob-3 { width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(0,242,254,0.3) 0%, rgba(0,242,254,0) 60%); top: 20%; left: 20%; animation-delay: -10s; mix-blend-mode: screen;}
 
-        @keyframes morph {
-            0% { transform: translateZ(-400px) translate(0, 0) scale(1) rotate(0deg); }
-            50% { transform: translateZ(-200px) translate(150px, 80px) scale(1.2) rotate(180deg); }
-            100% { transform: translateZ(-400px) translate(0, 0) scale(1) rotate(360deg); }
+        @keyframes floatBlob {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(100px, 50px); }
+            66% { transform: translate(-50px, 100px); }
+            100% { transform: translate(0, 0); }
         }
 
         #scaler {
             position: absolute;
             top: 50%; left: 50%;
-            width: 1600px;
+            width: 1600px; 
             height: 900px;
             margin-left: -800px; 
             margin-top: -450px;
             transform-style: preserve-3d;
-            perspective: 2500px;
+            perspective: 2000px;
             z-index: 1;
         }
 
@@ -90,7 +68,7 @@
             position: absolute;
             width: 100%; height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.1s linear; /* Reso più reattivo */
+            transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1);
             will-change: transform;
         }
 
@@ -99,449 +77,423 @@
             width: 100%; height: 100%;
             opacity: 0;
             visibility: hidden;
-            /* Entrata molto più profonda e drammatica */
-            transform: translateZ(-4000px) rotateY(60deg) rotateX(10deg) scale(0.2);
-            transition: all 1.4s cubic-bezier(0.25, 1, 0.2, 1);
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.2, 1);
             pointer-events: none;
-            transform-style: preserve-3d;
             z-index: 0;
-            will-change: transform, opacity, visibility;
+            will-change: transform, opacity;
         }
 
         .slide.active {
             opacity: 1;
             visibility: visible;
-            transform: translateZ(0) rotateY(0) rotateX(0) scale(1);
+            transform: scale(1);
             pointer-events: auto;
             z-index: 10;
         }
 
+        /* Effetto Vetro Liquido */
         .glass-bg {
             position: absolute;
             inset: 0;
             background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
-            border-top: 2px solid var(--glass-highlight);
-            border-left: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 4rem;
-            box-shadow: 
-                0 60px 120px rgba(0,0,0,0.9), 
-                inset 0 1px 10px rgba(255, 255, 255, 0.6), 
-                inset 0 -10px 30px rgba(255,255,255,0.03);
+            border-top: 1px solid var(--glass-highlight);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 3rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 2px rgba(255, 255, 255, 0.3);
             z-index: -1;
-            transform: translateZ(-20px); /* Spinge il vetro leggermente indietro */
-        }
-
-        .glass-bg::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
-            transform: skewX(-25deg) translateX(-300%);
-            animation: sweepLight 7s infinite linear;
-            pointer-events: none;
-        }
-
-        @keyframes sweepLight {
-            0% { transform: skewX(-25deg) translateX(-300%); }
-            20% { transform: skewX(-25deg) translateX(300%); }
-            100% { transform: skewX(-25deg) translateX(300%); }
+            overflow: hidden; 
         }
 
         .slide-content {
             position: relative;
             width: 100%; height: 100%;
             padding: 5rem 6rem;
-            transform-style: preserve-3d;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        /* Stagger Items ora partono dal fondo per volare in avanti */
         .stagger-item {
             opacity: 0;
-            transform: translateY(80px) translateZ(-300px) scale(0.8);
-            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform-style: preserve-3d; /* Fondamentale per i figli 3D */
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .slide.active .stagger-item { opacity: 1; }
-        .slide.active .delay-1 { transition-delay: 0.3s; transform: translateY(0) translateZ(0px) scale(1); }
-        .slide.active .delay-2 { transition-delay: 0.45s; transform: translateY(0) translateZ(0px) scale(1); }
-        .slide.active .delay-3 { transition-delay: 0.6s; transform: translateY(0) translateZ(0px) scale(1); }
-        .slide.active .delay-4 { transition-delay: 0.75s; transform: translateY(0) translateZ(0px) scale(1); }
+        .slide.active .stagger-item { opacity: 1; transform: translateY(0); }
+        .slide.active .delay-1 { transition-delay: 0.2s; }
+        .slide.active .delay-2 { transition-delay: 0.35s; }
+        .slide.active .delay-3 { transition-delay: 0.5s; }
+        .slide.active .delay-4 { transition-delay: 0.65s; }
 
-        .title-3d {
-            font-family: 'Outfit', sans-serif;
-            font-size: 9rem;
-            font-weight: 900;
-            color: #ffffff;
-            letter-spacing: -4px;
-            text-transform: uppercase;
-            /* Ombra 3D molto più pronunciata */
-            text-shadow: 
-                1px 1px 0 #005c8a, 2px 2px 0 #006b9e, 3px 3px 0 #007bb1, 
-                4px 4px 0 #008ac5, 5px 5px 0 #0099d8, 6px 6px 0 #00a9ec,
-                7px 7px 0 #00b8ff, 8px 8px 0 #1ac1ff, 9px 9px 0 #33caff,
-                15px 25px 40px rgba(0,0,0,0.9), 
-                0px 20px 60px rgba(0, 242, 254, 0.8);
-            margin-bottom: 1rem;
-            line-height: 1;
-            transform: translateZ(250px); /* Vola altissimo */
-        }
-
-        h1 { font-family: 'Outfit', sans-serif; font-size: 5rem; font-weight: 800; margin-bottom: 1.5rem; background: linear-gradient(to bottom right, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.5)); transform: translateZ(120px); }
-        h2 { font-size: 3rem; color: #fff; margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif; transform: translateZ(90px); }
-        h3 { font-size: 2.2rem; font-weight: 700; color: var(--accent-cyan); margin-bottom: 1rem; transform: translateZ(60px); text-shadow: 0 5px 15px rgba(0,0,0,0.5);}
-        p, li { font-size: 1.6rem; line-height: 1.6; color: rgba(255,255,255,0.9); transform: translateZ(30px); }
+        /* Typography */
+        h1 { font-family: 'Outfit', sans-serif; font-size: 4.5rem; font-weight: 800; margin-bottom: 1.5rem; background: linear-gradient(to right, #fff, var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+        h2 { font-size: 2.8rem; color: #fff; margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif; }
+        h3 { font-size: 1.8rem; font-weight: 600; color: var(--accent-cyan); margin-bottom: 0.8rem; }
+        p, li { font-size: 1.45rem; line-height: 1.7; color: rgba(255,255,255,0.9); }
+        strong { color: #fff; }
         
         .glass-panel-inner {
-            background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-top: 2px solid rgba(255, 255, 255, 0.5);
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 2rem;
             padding: 2.5rem;
-            backdrop-filter: blur(25px);
-            box-shadow: 
-                0 30px 60px rgba(0,0,0,0.5),
-                inset 0 0 20px rgba(255,255,255,0.05);
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.5s, border-color 0.5s;
-            position: relative;
-            transform: translateZ(40px); /* Profondità di base */
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s;
         }
 
-        /* Hover Effect Estremo sui Pannelli */
         .glass-panel-inner:hover {
-            transform: translateZ(180px) scale(1.08) !important;
-            box-shadow: 
-                0 50px 100px rgba(0, 0, 0, 0.8),
-                0 20px 40px rgba(0, 242, 254, 0.3), 
-                inset 0 0 30px rgba(255,255,255,0.2);
-            border-color: var(--accent-cyan);
-            z-index: 100;
+            transform: translateY(-5px);
+            box-shadow: 0 25px 40px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(255,255,255,0.05);
+            border-color: rgba(0, 242, 254, 0.3);
         }
-
-        /* Elementi interni ai pannelli escono ancora di più all'hover */
-        .glass-panel-inner:hover > h3 { transform: translateZ(120px); color: #fff;}
-        .glass-panel-inner:hover > p, .glass-panel-inner:hover > ul { transform: translateZ(80px); }
-        .glass-panel-inner:hover > i { transform: translateZ(150px) scale(1.2); }
 
         .img-glass-wrapper {
             position: relative;
-            padding: 1.5rem;
+            padding: 1rem;
             background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-top: 2px solid rgba(255,255,255,0.6);
-            border-radius: 3rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 2.5rem;
             height: 100%;
-            backdrop-filter: blur(20px);
-            transform-style: preserve-3d;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
-            transform: translateZ(60px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .real-img {
             width: 100%; height: 100%; object-fit: cover;
-            border-radius: 2rem;
-            transform: translateZ(80px); /* L'immagine esce dalla cornice */
-            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
-            transition: transform 0.5s ease;
-        }
-        
-        .img-glass-wrapper:hover .real-img {
-            transform: translateZ(140px) scale(1.05);
+            border-radius: 1.5rem;
         }
 
+        /* Controlli HUD Inferiori */
         .hud {
             position: fixed;
-            bottom: 2.5rem; left: 0; width: 100%;
+            bottom: 2rem; left: 0; width: 100%;
             display: flex; justify-content: center; align-items: center; gap: 4rem;
             z-index: 1000;
             pointer-events: none;
-            transform-style: preserve-3d;
         }
 
         .btn-glass {
             pointer-events: auto;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
             color: white;
-            padding: 1.2rem 2.5rem;
+            padding: 1rem 2rem;
             border-radius: 3rem;
-            font-size: 1.2rem; font-weight: 800;
+            font-size: 1.1rem; font-weight: 700;
             cursor: pointer; transition: all 0.3s;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.3);
-            display: flex; align-items: center; gap: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            display: flex; align-items: center; gap: 0.8rem;
         }
 
         .btn-glass:hover { 
-            background: rgba(0, 242, 254, 0.2); 
-            transform: translateY(-5px) translateZ(50px) scale(1.1); 
-            box-shadow: 0 25px 60px rgba(0,242,254,0.5), inset 0 2px 10px rgba(255,255,255,0.6); 
+            background: rgba(255, 255, 255, 0.15); 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 15px 30px rgba(0,242,254,0.3); 
             border-color: var(--accent-cyan);
-            color: var(--accent-cyan);
         }
 
         .progress-track { 
-            width: 500px; height: 12px; 
-            background: rgba(0,0,0,0.8); 
-            border: 1px solid rgba(255,255,255,0.2); 
-            border-radius: 6px; overflow: hidden; 
-            box-shadow: inset 0 3px 8px rgba(0,0,0,0.9), 0 5px 15px rgba(0,0,0,0.5); 
+            width: 350px; height: 8px; 
+            background: rgba(0,0,0,0.5); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 4px; overflow: hidden; 
         }
         
         .progress-fill { 
             height: 100%; 
-            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), #ffffff); 
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-purple)); 
             width: 0%; 
-            transition: width 0.6s cubic-bezier(0.25, 1, 0.2, 1); 
-            box-shadow: 0 0 25px var(--accent-cyan); 
-        }
-
-        /* Animazione galleggiante per icone grandi */
-        @keyframes float3D {
-            0%, 100% { transform: translateY(0) translateZ(-200px) rotate(15deg); }
-            50% { transform: translateY(-40px) translateZ(-150px) rotate(20deg); }
+            transition: width 0.4s ease-out; 
+            box-shadow: 0 0 15px var(--accent-cyan); 
         }
 
         .bg-icon {
-            position: absolute; font-size: 40rem; color: white; opacity: 0.04;
+            position: absolute; font-size: 30rem; color: white; opacity: 0.03;
             z-index: -1; pointer-events: none;
-            animation: float3D 10s ease-in-out infinite;
         }
-        
-        .scroll-hint {
-            position: absolute; bottom: 80px; width: 100%; text-align: center;
-            opacity: 0.6; font-size: 1.2rem; letter-spacing: 3px; font-weight: 600;
-            animation: pulseHint 2s infinite; pointer-events: none;
-            transform: translateZ(100px);
-            text-shadow: 0 5px 10px rgba(0,0,0,0.5);
+
+        .list-neat li {
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-left: 2rem;
         }
-        @keyframes pulseHint { 0%, 100% { opacity: 0.4; transform: translateZ(100px) translateY(0); } 50% { opacity: 1; transform: translateZ(100px) translateY(-15px); text-shadow: 0 0 20px var(--accent-cyan); color: var(--accent-cyan);} }
+        .list-neat li::before {
+            content: "\f0da";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-cyan);
+            top: 4px;
+        }
+
+        .chart-wrapper {
+            position: relative; height: 350px; width: 100%;
+        }
     </style>
 </head>
 <body>
 
-    <div class="cyber-grid"></div>
-
-    <div class="ambient-blob blob-1" id="blob1"></div>
-    <div class="ambient-blob blob-2" id="blob2"></div>
-    <div class="ambient-blob blob-3" id="blob3"></div>
+    <!-- Sfondi Fluidi Animati -->
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
 
     <div id="scaler">
         <div id="world">
 
-            <!-- SLIDE 1: INTRO -->
+            <!-- SLIDE 1: TITOLO -->
             <div class="slide active" id="slide-0">
                 <div class="glass-bg"></div>
                 <div class="slide-content flex flex-col items-center justify-center text-center">
-                    <i class="fa-solid fa-earth-americas bg-icon" style="top: 5%; right: 5%;"></i>
+                    <i class="fa-brands fa-bitcoin bg-icon" style="top: 5%; right: 5%; transform: rotate(15deg);"></i>
                     
-                    <div class="glass-panel-inner py-4 px-10 mb-12 stagger-item delay-1" style="border-radius: 40px; transform: translateZ(150px);">
-                        <p class="text-3xl tracking-widest uppercase text-cyan-300 font-bold m-0" style="text-shadow: 0 0 15px rgba(0,242,254,0.6); transform: translateZ(20px);">
-                            Presentazione di Scienze
+                    <div class="glass-panel-inner py-3 px-8 mb-12 stagger-item delay-1" style="border-radius: 40px;">
+                        <p class="text-2xl tracking-widest uppercase text-cyan-300 font-bold m-0" style="text-shadow: 0 0 10px rgba(0,242,254,0.5);">
+                            Tesina di Tecnologia
                         </p>
                     </div>
                     
-                    <div class="title-3d stagger-item delay-2 js-tilt">La Forma <br>della Terra</div>
+                    <h1 style="font-size: 6rem; margin-bottom: 0;" class="stagger-item delay-2">Raffaele Pannullo</h1>
                     
-                    <h2 class="stagger-item delay-3 mt-16 text-5xl font-bold" style="transform: translateZ(180px); color: #e2e8f0; text-shadow: 0 10px 20px rgba(0,0,0,0.8);">
-                        Da Eratostene al Reticolato Geografico
+                    <h2 class="stagger-item delay-3 mt-10 text-6xl font-bold text-white">
+                        Blockchain e Criptovalute
                     </h2>
-                    
-                    <div class="scroll-hint stagger-item delay-4"><i class="fa-solid fa-computer-mouse mr-2"></i> Usa la rotellina per scorrere</div>
+                    <p class="text-3xl mt-4 stagger-item delay-4 text-cyan-100 max-w-4xl">
+                        Una tecnologia che sta letteralmente cambiando il modo in cui concepiamo lo scambio di informazioni e di valore su Internet.
+                    </p>
                 </div>
             </div>
 
-            <!-- SLIDE 2: PROVE -->
+            <!-- SLIDE 2: INTRODUZIONE -->
             <div class="slide" id="slide-1">
                 <div class="glass-bg"></div>
-                <div class="slide-content">
-                    <h1 class="text-center stagger-item delay-1 mb-16" style="font-size: 6rem; transform: translateZ(200px);">Le prove della sfericità</h1>
-                    <p class="text-center mb-16 text-4xl stagger-item delay-2 text-cyan-200" style="transform: translateZ(150px); text-shadow: 0 5px 15px rgba(0,0,0,0.5);">Come eravamo certi della curvatura prima dei satelliti?</p>
-                    
-                    <div class="grid grid-cols-3 gap-12 h-[50%]">
-                        <div class="glass-panel-inner text-center flex flex-col items-center justify-center stagger-item delay-2 border-t-blue-400" style="transform: translateZ(80px);">
-                            <i class="fa-solid fa-ship text-8xl text-blue-400 mb-8" style="transform: translateZ(100px); filter: drop-shadow(0 20px 30px rgba(59,130,246,0.5)); transition: transform 0.3s;"></i>
-                            <h3 class="text-4xl mb-6" style="transform: translateZ(80px);">1. L'Orizzonte</h3>
-                            <p style="transform: translateZ(50px); font-size: 1.4rem;">Le navi all'orizzonte spariscono partendo dallo scafo: scendono lungo la curvatura del pianeta.</p>
+                <div class="slide-content grid grid-cols-2 gap-16 items-center">
+                    <div class="flex flex-col justify-center">
+                        <h1 class="stagger-item delay-1">L'Importanza</h1>
+                        <p class="mb-8 stagger-item delay-2">Sentiamo spesso parlare di Bitcoin al telegiornale associati a grandi guadagni o crolli finanziari. Ma dietro a questi titoli si nasconde una tecnologia rivoluzionaria.</p>
+                        
+                        <div class="glass-panel-inner stagger-item delay-3 border-l-4 border-l-cyan-400">
+                            <h3 class="text-cyan-300"><i class="fa-solid fa-globe mr-3"></i> Informazione vs Valore</h3>
+                            <p class="mt-4">Se Internet ha permesso a chiunque di scambiare <em>informazioni</em> in tempo reale...</p>
+                            <p class="mt-4">La Blockchain permette di scambiare <strong>valore</strong> (denaro, contratti, diritti di proprietà) in modo sicuro, senza bisogno di un intermediario centrale, come una banca o uno Stato.</p>
                         </div>
-                        <div class="glass-panel-inner text-center flex flex-col items-center justify-center stagger-item delay-3 border-t-purple-400" style="transform: translateZ(120px) scale(1.05); z-index: 5;">
-                            <i class="fa-solid fa-star text-8xl text-purple-400 mb-8" style="transform: translateZ(120px); filter: drop-shadow(0 20px 30px rgba(168,85,247,0.5));"></i>
-                            <h3 class="text-4xl mb-6" style="transform: translateZ(80px);">2. Le Stelle</h3>
-                            <p style="transform: translateZ(50px); font-size: 1.4rem;">L'altezza della Stella Polare sull'orizzonte varia spostandosi verso Nord o verso Sud.</p>
-                        </div>
-                        <div class="glass-panel-inner text-center flex flex-col items-center justify-center stagger-item delay-4 border-t-cyan-400" style="transform: translateZ(80px);">
-                            <i class="fa-solid fa-compass text-8xl text-cyan-400 mb-8" style="transform: translateZ(100px); filter: drop-shadow(0 20px 30px rgba(6,182,212,0.5));"></i>
-                            <h3 class="text-4xl mb-6" style="transform: translateZ(80px);">3. La Storia</h3>
-                            <p style="transform: translateZ(50px); font-size: 1.4rem;">La spedizione di Magellano (1522): viaggiando sempre verso Ovest tornarono al punto di partenza.</p>
-                        </div>
+                    </div>
+                    <div class="img-glass-wrapper stagger-item delay-4">
+                        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Rete Globale P2P" class="real-img">
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 3: ELLISSOIDE -->
+            <!-- SLIDE 3: COS'E LA BLOCKCHAIN -->
             <div class="slide" id="slide-2">
                 <div class="glass-bg"></div>
-                <div class="slide-content grid grid-cols-2 gap-16 items-center">
-                    <div class="flex flex-col justify-center">
-                        <h1 class="stagger-item delay-1" style="font-size: 5.5rem; transform: translateZ(180px);">L'Ellissoide<br>di Rotazione</h1>
-                        <p class="mb-12 text-3xl font-light text-cyan-200 stagger-item delay-2" style="transform: translateZ(140px);">La Terra <strong class="text-white text-4xl">non è</strong> una sfera perfetta.</p>
-                        
-                        <div class="glass-panel-inner stagger-item delay-3 border-l-8 border-l-blue-400 mb-8" style="transform: translateZ(100px);">
-                            <ul class="list-none space-y-6">
-                                <li><i class="fa-solid fa-ruler-horizontal text-blue-400 mr-4 text-3xl" style="transform: translateZ(40px);"></i> <strong style="transform: translateZ(40px);">Raggio Equatore:</strong> 6.378 km</li>
-                                <li><i class="fa-solid fa-ruler-vertical text-blue-400 mr-4 text-3xl" style="transform: translateZ(40px);"></i> <strong style="transform: translateZ(40px);">Raggio Poli:</strong> 6.357 km</li>
-                                <li><i class="fa-solid fa-arrows-left-right text-cyan-400 mr-4 text-3xl" style="transform: translateZ(40px);"></i> <strong class="text-cyan-300" style="transform: translateZ(40px);">Differenza:</strong> 21 km (schiacciata ai poli)</li>
-                            </ul>
+                <div class="slide-content flex flex-col justify-center items-center text-center">
+                    <i class="fa-solid fa-link bg-icon" style="bottom: 10%; right: 10%; transform: rotate(-10deg);"></i>
+                    <h1 class="stagger-item delay-1 mb-8 text-7xl">Che cos'è la Blockchain?</h1>
+                    <p class="text-3xl text-cyan-200 stagger-item delay-2 mb-12">In italiano significa letteralmente "Catena di Blocchi". Ma blocchi di cosa? Blocchi di dati, di informazioni.</p>
+                    
+                    <div class="grid grid-cols-2 gap-12 w-full stagger-item delay-3">
+                        <div class="glass-panel-inner text-left border-t-red-500">
+                            <h3 class="text-red-400 text-3xl mb-4"><i class="fa-solid fa-building-columns mr-3"></i> Il Sistema Centralizzato</h3>
+                            <p>Immaginate un grande <strong>libro mastro contabile</strong> tenuto da una sola persona (una banca). Dobbiamo fidarci ciecamente che non modifichi quei dati a suo vantaggio.</p>
                         </div>
-
-                        <div class="glass-panel-inner stagger-item delay-4 bg-purple-900/30 border-l-8 border-l-purple-500" style="transform: translateZ(120px);">
-                            <h3 class="text-purple-300 text-4xl mb-4"><i class="fa-solid fa-rotate mr-3"></i> La Causa</h3>
-                            <p>Lo schiacciamento è dovuto alla <strong>forza centrifuga</strong> generata dalla rotazione terrestre (come l'impasto di una pizza che gira in aria).</p>
+                        <div class="glass-panel-inner text-left border-t-cyan-400">
+                            <h3 class="text-cyan-400 text-3xl mb-4"><i class="fa-solid fa-network-wired mr-3"></i> Registro Distribuito</h3>
+                            <p>La Blockchain è decentralizzata. Invece di un solo libro, ce ne sono <strong>migliaia di copie identiche</strong> distribuite sui computer di migliaia di persone nel mondo (i <strong>Nodi</strong>).</p>
                         </div>
-                    </div>
-                    <div class="img-glass-wrapper stagger-item delay-4" style="transform: translateZ(150px);">
-                        <img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?q=80&w=1200&auto=format&fit=crop" alt="Terra vista dallo spazio" class="real-img">
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 4: GEOIDE -->
+            <!-- SLIDE 4: LE TRANSAZIONI -->
             <div class="slide" id="slide-3">
                 <div class="glass-bg"></div>
-                <div class="slide-content grid grid-cols-2 gap-20 items-center">
-                    <div class="img-glass-wrapper stagger-item delay-1" style="transform: translateZ(180px); height: 80%;">
-                        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop" alt="Rilievi terrestri" class="real-img">
-                    </div>
-                    <div class="flex flex-col justify-center">
-                        <h1 class="text-8xl mb-6 stagger-item delay-2" style="transform: translateZ(250px);">Il Geoide</h1>
-                        <p class="mb-12 text-4xl font-light text-cyan-200 stagger-item delay-3" style="transform: translateZ(180px);">Il modello fisico reale della Terra.</p>
-                        
-                        <div class="glass-panel-inner stagger-item delay-4 border-l-8 border-l-cyan-400" style="transform: translateZ(120px);">
-                            <h3 class="text-cyan-300 text-4xl mb-6" style="transform: translateZ(60px);"><i class="fa-solid fa-mountain mr-4"></i> Superficie Irregolare</h3>
-                            <p class="mb-6" style="transform: translateZ(40px);">La crosta terrestre è piena di <strong>montagne e fosse oceaniche</strong>.</p>
-                            <p style="transform: translateZ(40px);">I materiali hanno pesi diversi, modificando la <strong>forza di gravità</strong> locale. Il Geoide è la forma (a "patata") che avrebbe la Terra se ricoperta da un oceano in perfetto equilibrio con la gravità.</p>
+                <div class="slide-content flex flex-col justify-center text-center">
+                    <h1 class="stagger-item delay-1 mb-16">Come funziona una transazione</h1>
+                    <div class="grid grid-cols-3 gap-8 h-full stagger-item delay-2">
+                        <div class="glass-panel-inner border-t-blue-400 flex flex-col items-center">
+                            <i class="fa-solid fa-bullhorn text-6xl text-blue-400 mb-6"></i>
+                            <h3 class="text-2xl mb-4">1. L'Annuncio</h3>
+                            <p class="text-lg">Quando invio denaro, l'informazione non viene scritta subito. Viene annunciata a tutta la rete. I nodi controllano se io ho davvero i soldi.</p>
+                        </div>
+                        <div class="glass-panel-inner border-t-purple-400 flex flex-col items-center">
+                            <i class="fa-solid fa-cubes-stacked text-6xl text-purple-400 mb-6"></i>
+                            <h3 class="text-2xl mb-4">2. Il Blocco</h3>
+                            <p class="text-lg">Se tutti confermano che è vero, la transazione viene raggruppata insieme ad altre transazioni in un vero e proprio "blocco".</p>
+                        </div>
+                        <div class="glass-panel-inner border-t-cyan-400 flex flex-col items-center">
+                            <i class="fa-solid fa-lock text-6xl text-cyan-400 mb-6"></i>
+                            <h3 class="text-2xl mb-4">3. Il Sigillo</h3>
+                            <p class="text-lg">Una volta pieno, il blocco viene sigillato e attaccato al precedente. L'informazione è scritta per sempre e non può essere modificata.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 5: RETICOLATO E MERIDIANI -->
+            <!-- SLIDE 5: CRITTOGRAFIA E SICUREZZA -->
             <div class="slide" id="slide-4">
                 <div class="glass-bg"></div>
-                <div class="slide-content flex flex-col justify-center">
-                    <i class="fa-solid fa-globe bg-icon" style="bottom: -20%; left: -5%; animation-duration: 20s; transform-origin: center;"></i>
-                    <h1 class="text-center stagger-item delay-1 mb-8" style="font-size: 7rem; transform: translateZ(250px);">Il Reticolato Geografico</h1>
-                    <p class="text-center mb-20 text-4xl stagger-item delay-2 text-cyan-200" style="transform: translateZ(180px);">Una griglia immaginaria per non perdersi mai.</p>
+                <!-- Sfondo diviso a metà -->
+                <div style="position:absolute; top:0; right:0; width:45%; height:100%; border-radius: 0 3.5rem 3.5rem 0; overflow:hidden;">
+                    <img src="https://images.unsplash.com/photo-1510511459019-5efa32dc8b9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">
+                    <div style="position:absolute; inset:0; background: linear-gradient(to right, var(--bg-deep) 0%, transparent 50%);"></div>
+                </div>
+                
+                <div class="slide-content" style="width: 60%;">
+                    <h1 class="stagger-item delay-1 text-6xl">Crittografia e Sicurezza</h1>
+                    <p class="mb-8 text-2xl stagger-item delay-2">A livello tecnologico, come fa questo sistema a non poter essere manomesso? Qui entra in gioco la <strong>crittografia</strong>.</p>
+                    
+                    <div class="glass-panel-inner stagger-item delay-3">
+                        <ul class="list-neat">
+                            <li><strong>L'Impronta Digitale:</strong> Viene generato un codice alfanumerico univoco (es. 8f4a2b...) per ogni blocco. Questa funzione matematica si chiama <strong>Hash</strong>.</li>
+                            <li><strong>L'Incastro:</strong> Ogni nuovo blocco contiene al suo interno l'Hash del blocco precedente. <em>È come se si tenessero per mano.</em></li>
+                            <li><strong>Rilevamento delle Truffe:</strong> Se un hacker modifica una transazione nel passato, il suo Hash cambia. Non combaciando più col blocco successivo, la catena si "spezza" e la rete rifiuta la modifica.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
-                    <div class="grid grid-cols-2 gap-16">
-                        <div class="glass-panel-inner stagger-item delay-3" style="border-top-color: #3b82f6; transform: translateZ(100px);">
-                            <h3 class="text-blue-400 text-5xl mb-8" style="transform: translateZ(80px);"><i class="fa-solid fa-grip-lines mr-4"></i> I Paralleli</h3>
-                            <ul class="list-none space-y-6 text-white" style="transform: translateZ(50px);">
-                                <li><i class="fa-solid fa-check text-blue-400 mr-4 text-2xl"></i> Sono circonferenze <strong>orizzontali</strong>.</li>
-                                <li><i class="fa-solid fa-check text-blue-400 mr-4 text-2xl"></i> Il principale è l'<strong>Equatore</strong>.</li>
-                                <li><i class="fa-solid fa-check text-blue-400 mr-4 text-2xl"></i> Divide la Terra in Emisfero <strong>Boreale</strong> (Nord) ed Emisfero <strong>Australe</strong> (Sud).</li>
-                            </ul>
-                        </div>
-                        <div class="glass-panel-inner stagger-item delay-4" style="border-top-color: #a855f7; transform: translateZ(140px); z-index: 5;">
-                            <h3 class="text-purple-400 text-5xl mb-8" style="transform: translateZ(80px);"><i class="fa-solid fa-grip-lines-vertical mr-4"></i> I Meridiani</h3>
-                            <ul class="list-none space-y-6 text-white" style="transform: translateZ(50px);">
-                                <li><i class="fa-solid fa-check text-purple-400 mr-4 text-2xl"></i> Semicirconferenze <strong>verticali</strong> e identiche (20.000 km).</li>
-                                <li><i class="fa-solid fa-check text-purple-400 mr-4 text-2xl"></i> Il Meridiano zero è <strong>Greenwich</strong> (Londra).</li>
-                                <li><i class="fa-solid fa-check text-purple-400 mr-4 text-2xl"></i> Fondamentali per calcolare i 24 <strong>Fusi Orari</strong>.</li>
-                            </ul>
+            <!-- SLIDE 6: I MINATORI E LA PROOF OF WORK -->
+            <div class="slide" id="slide-5">
+                <div class="glass-bg"></div>
+                <div class="slide-content flex flex-col justify-center">
+                    <h1 class="text-center stagger-item delay-1 mb-16">I Minatori e la Potenza di Calcolo</h1>
+                    <div class="glass-panel-inner max-w-4xl mx-auto text-center stagger-item delay-2 border-t-orange-500">
+                        <i class="fa-solid fa-microchip text-8xl text-orange-400 mb-8"></i>
+                        <p class="text-2xl leading-relaxed">
+                            Per creare e sigillare questi blocchi, serve potenza di calcolo. Nel sistema originario del Bitcoin, i computer che fanno questo lavoro si chiamano <strong>Minatori</strong> (o miners).
+                            <br><br>
+                            Essi risolvono complessi enigmi matematici per sigillare il blocco, un processo noto come <strong>Proof of Work</strong> (Prova di Lavoro). In cambio dell'energia dei loro computer, il sistema li ricompensa regalandogli nuove criptovalute.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 7: LE CRIPTOVALUTE -->
+            <div class="slide" id="slide-6">
+                <div class="glass-bg"></div>
+                <div class="slide-content grid grid-cols-2 gap-16 items-center">
+                    <div class="img-glass-wrapper stagger-item delay-1">
+                        <img src="https://images.unsplash.com/photo-1621416894569-0f39ed31d247?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bitcoin Glow" class="real-img">
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <h1 class="stagger-item delay-2">Le Criptovalute</h1>
+                        <p class="mb-8 text-2xl stagger-item delay-3">Il "motore" è la Blockchain, l'automobile sono le Criptovalute.</p>
+                        <div class="glass-panel-inner stagger-item delay-4 border-l-4 border-l-yellow-400 mb-6">
+                            <h3 class="text-yellow-400"><i class="fa-brands fa-bitcoin mr-3"></i> Il Bitcoin (2009)</h3>
+                            <p>Nato da un inventore anonimo (Satoshi Nakamoto) per non dipendere da governi o banche centrali, in risposta alla grande crisi finanziaria del 2008.</p>
+                            <p class="mt-4">A differenza dell'Euro che può essere stampato all'infinito causando inflazione, il Bitcoin ha un limite: ne esisteranno <strong>al massimo 21 milioni</strong>. Per questo è considerato 'oro digitale'.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 6: LE COORDINATE -->
-            <div class="slide" id="slide-5">
+            <!-- SLIDE 8: LE ALTCOIN -->
+            <div class="slide" id="slide-7">
                 <div class="glass-bg"></div>
                 <div class="slide-content grid grid-cols-2 gap-16 items-center">
                     <div class="flex flex-col justify-center">
-                        <h1 class="stagger-item delay-1" style="font-size: 7rem; transform: translateZ(250px);">Le Coordinate</h1>
-                        <p class="mb-12 mt-6 stagger-item delay-2 text-3xl" style="transform: translateZ(180px);">L'incrocio tra un parallelo e un meridiano ci dà il punto esatto in <strong>gradi angolari</strong>.</p>
-                        
-                        <div class="glass-panel-inner border-l-8 border-l-cyan-400 stagger-item delay-3 mb-8 bg-cyan-900/30" style="transform: translateZ(120px);">
-                            <h3 class="text-cyan-300 text-4xl mb-4" style="transform: translateZ(60px);">Latitudine</h3>
-                            <p class="text-2xl" style="transform: translateZ(40px);">Distanza angolare dall'Equatore (Nord/Sud, da 0° a 90°).</p>
-                        </div>
-                        
-                        <div class="glass-panel-inner border-l-8 border-l-blue-400 stagger-item delay-4 bg-blue-900/30" style="transform: translateZ(140px);">
-                            <h3 class="text-blue-300 text-4xl mb-4" style="transform: translateZ(60px);">Longitudine</h3>
-                            <p class="text-2xl" style="transform: translateZ(40px);">Distanza angolare da Greenwich (Est/Ovest, da 0° a 180°).</p>
+                        <h1 class="stagger-item delay-1 text-5xl">Le Alternative (Altcoin)</h1>
+                        <p class="mb-8 text-2xl stagger-item delay-2">Dopo il Bitcoin sono nate migliaia di altre monete. La più famosa è <strong>Ethereum</strong>.</p>
+                        <div class="glass-panel-inner stagger-item delay-3 border-l-4 border-l-purple-500">
+                            <h3 class="text-purple-300"><i class="fa-brands fa-ethereum mr-3"></i> Gli Smart Contract</h3>
+                            <p>Ethereum ha introdotto una novità pazzesca: i contratti intelligenti. Sono veri programmi software inseriti nella Blockchain che <strong>si eseguono da soli</strong> quando si verificano certe condizioni.</p>
+                            <p class="mt-4 italic text-purple-200 text-lg border-l-2 border-purple-400 pl-4">"Se il volo aereo fa più di due ore di ritardo, invia automaticamente un rimborso di 50 euro al passeggero."</p>
                         </div>
                     </div>
-                    <div class="glass-panel-inner stagger-item delay-4 h-[80%] flex flex-col justify-center items-center text-center bg-black/40 border-t-red-500" style="transform: translateZ(160px);">
-                        <i class="fa-solid fa-location-dot text-[14rem] text-red-500 mb-12" style="filter: drop-shadow(0 40px 60px rgba(239,68,68,0.7)); transform: translateZ(150px);"></i>
-                        <h3 class="text-5xl text-white mb-6" style="transform: translateZ(100px);">I Sistemi GPS</h3>
-                        <p class="mt-4 text-2xl text-gray-300" style="transform: translateZ(80px);">Quando mandi la posizione su WhatsApp, lo smartphone legge proprio questi gradi tramite i satelliti.</p>
+                    <div class="img-glass-wrapper stagger-item delay-4">
+                        <img src="https://images.unsplash.com/photo-1639762681057-408e52192e55?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Smart Contract UI" class="real-img">
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 7: PARALLELI SPECIALI -->
-            <div class="slide" id="slide-6">
+            <!-- SLIDE 9: I LATI OSCURI - AMBIENTE -->
+            <div class="slide" id="slide-8">
+                <div class="glass-bg"></div>
+                <div class="slide-content grid grid-cols-2 gap-16 items-center">
+                    <div class="flex flex-col justify-center">
+                        <h1 class="stagger-item delay-1 text-red-400 text-5xl">I Lati Oscuri: L'Ambiente</h1>
+                        <p class="mb-8 text-xl stagger-item delay-2">Il problema tecnologico e ambientale più discusso è <strong>l'altissimo consumo di energia</strong>. I minatori usano computer potentissimi accesi 24h su 24.</p>
+                        <div class="glass-panel-inner stagger-item delay-3 border-l-4 border-l-orange-500">
+                            <h3 class="text-orange-400"><i class="fa-solid fa-leaf mr-3"></i> Impatto Ecologico</h3>
+                            <p>Attualmente, la rete Bitcoin consuma la stessa quantità di energia elettrica di intere nazioni (come Argentina o Svezia). Se non proviene da fonti rinnovabili, l'impatto è enorme.</p>
+                            <p class="mt-4 text-green-300 text-lg font-bold"><i class="fa-solid fa-check mr-2"></i> Alcune nuove criptovalute hanno cambiato sistema passando al "Proof of Stake", che taglia i consumi del 99%.</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel-inner stagger-item delay-4 h-[400px] flex flex-col justify-center bg-black/30">
+                        <h3 class="text-center text-xl mb-6 text-white uppercase tracking-widest">Consumo Annuo (TWh)</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="energyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 10: VOLATILITÀ E RISCHI -->
+            <div class="slide" id="slide-9">
                 <div class="glass-bg"></div>
                 <div class="slide-content flex flex-col justify-center">
-                    <i class="fa-solid fa-sun bg-icon" style="top: 10%; right: 10%; font-size: 30rem; color: #fbbf24; opacity: 0.1; animation-duration: 30s;"></i>
-                    <h1 class="text-center stagger-item delay-1 mb-8" style="font-size: 7rem; transform: translateZ(250px);">Paralleli Speciali e Clima</h1>
-                    <p class="text-center max-w-5xl mx-auto mb-20 text-4xl font-light text-cyan-100 stagger-item delay-2" style="transform: translateZ(180px);">Linee chiave per comprendere le stagioni sulla Terra.</p>
-                    
-                    <div class="grid grid-cols-2 gap-16 stagger-item delay-3" style="transform: translateZ(120px);">
-                        <div class="glass-panel-inner relative overflow-hidden group hover:bg-orange-900/40 border-t-4 border-t-orange-400">
-                            <i class="fa-solid fa-fire absolute -right-10 -bottom-10 text-[20rem] text-orange-500 opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700" style="transform: translateZ(-50px);"></i>
-                            <h3 class="text-orange-300 text-5xl mb-8 flex items-center" style="transform: translateZ(80px);"><i class="fa-solid fa-sun mr-4"></i> I Tropici</h3>
-                            <p class="text-3xl mb-6 font-bold text-white" style="transform: translateZ(60px);">Cancro (Nord) & Capricorno (Sud)</p>
-                            <p class="text-2xl text-gray-200 bg-black/50 p-6 rounded-2xl border border-white/10" style="transform: translateZ(40px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">Segnano i punti in cui i raggi del Sole cadono <strong>perfettamente perpendicolari</strong> durante i solstizi.</p>
+                    <h1 class="text-center stagger-item delay-1 mb-16 text-5xl">I Lati Oscuri: Volatilità e Limiti</h1>
+                    <div class="grid grid-cols-2 gap-12 stagger-item delay-2">
+                        <div class="glass-panel-inner border-t-yellow-400">
+                            <h3 class="text-yellow-400 text-4xl mb-6"><i class="fa-solid fa-chart-line-down mr-3"></i> La Volatilità</h3>
+                            <p>Il prezzo delle criptovalute cambia in modo imprevedibile.</p>
+                            <p class="mt-4">Un Bitcoin può valere 60.000 euro un mese e crollare a 20.000 il mese successivo. Questo lo rende per ora un mezzo rischioso da usare per fare la spesa tutti i giorni.</p>
                         </div>
-                        <div class="glass-panel-inner relative overflow-hidden group hover:bg-cyan-900/40 border-t-4 border-t-cyan-400">
-                            <i class="fa-solid fa-snowflake absolute -right-10 -bottom-10 text-[20rem] text-cyan-500 opacity-10 group-hover:scale-125 group-hover:opacity-20 transition-all duration-700" style="transform: translateZ(-50px);"></i>
-                            <h3 class="text-cyan-300 text-5xl mb-8 flex items-center" style="transform: translateZ(80px);"><i class="fa-solid fa-icicles mr-4"></i> I Circoli Polari</h3>
-                            <p class="text-3xl mb-6 font-bold text-white" style="transform: translateZ(60px);">Artico (Nord) & Antartico (Sud)</p>
-                            <p class="text-2xl text-gray-200 bg-black/50 p-6 rounded-2xl border border-white/10" style="transform: translateZ(40px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">Delimitano le zone estreme in cui si verifica il <strong>Sole di Mezzanotte</strong> (il sole non tramonta per 24h).</p>
+                        <div class="glass-panel-inner border-t-red-500">
+                            <h3 class="text-red-400 text-4xl mb-6"><i class="fa-solid fa-user-secret mr-3"></i> Anonimato e Dark Web</h3>
+                            <p>Infine, l'anonimato e l'assenza di banche hanno reso in passato le criptovalute lo strumento preferito per attività illecite sul dark web.</p>
+                            <p class="mt-4 text-green-300 font-bold">Anche se oggi la situazione è molto più controllata e regolamentata dai governi.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SLIDE 8: CONCLUSIONI -->
-            <div class="slide" id="slide-7">
+            <!-- SLIDE 11: CONCLUSIONE -->
+            <div class="slide" id="slide-10">
                 <div class="glass-bg"></div>
-                <div class="slide-content flex flex-col items-center justify-center text-center">
-                    <i class="fa-solid fa-graduation-cap text-[12rem] text-cyan-400 mb-16 stagger-item delay-1" style="filter: drop-shadow(0 30px 60px rgba(0,242,254,0.9)); transform: translateZ(280px);"></i>
-                    <h1 class="text-8xl stagger-item delay-2 mb-20" style="transform: translateZ(220px);">Perché studiare tutto questo?</h1>
-                    
-                    <div class="glass-panel-inner max-w-6xl stagger-item delay-3 py-12 px-16" style="border-radius: 40px; transform: translateZ(150px); background: rgba(0, 0, 0, 0.4);">
-                        <ul class="list-none space-y-8 text-4xl text-white text-left inline-block" style="transform: translateZ(80px);">
-                            <li><i class="fa-solid fa-satellite text-cyan-400 mr-6 w-12 text-center" style="transform: translateZ(40px);"></i> Far funzionare navigatori e smartphone.</li>
-                            <li><i class="fa-solid fa-clock text-cyan-400 mr-6 w-12 text-center" style="transform: translateZ(40px);"></i> Regolare i Fusi Orari mondiali.</li>
-                            <li><i class="fa-solid fa-plane text-cyan-400 mr-6 w-12 text-center" style="transform: translateZ(40px);"></i> Tracciare rotte aeree sicure.</li>
-                            <li><i class="fa-solid fa-cloud-sun text-cyan-400 mr-6 w-12 text-center" style="transform: translateZ(40px);"></i> Comprendere zone climatiche e stagioni.</li>
-                        </ul>
+                <div class="slide-content grid grid-cols-2 gap-16 items-center">
+                    <div class="img-glass-wrapper stagger-item delay-1">
+                        <!-- Immagine tech di supply chain -->
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Digital Supply Chain" class="real-img">
                     </div>
-                    
-                    <h3 class="mt-20 text-cyan-300 text-5xl font-bold stagger-item delay-4 js-tilt tracking-widest uppercase" data-z="300" style="transform: translateZ(300px); text-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 30px rgba(0,242,254,0.6);">
-                        Grazie alla scienza, abbiamo "ingabbiato" <br>un pianeta irregolare in una rete perfetta.
-                    </h3>
+                    <div class="flex flex-col justify-center">
+                        <h1 class="stagger-item delay-2">Conclusione</h1>
+                        <p class="mb-6 text-2xl stagger-item delay-3">La tecnologia Blockchain rappresenta una vera e propria <strong>rivoluzione informatica</strong>.</p>
+                        
+                        <div class="glass-panel-inner stagger-item delay-4 border-t-cyan-400">
+                            <p class="mb-4">Se le criptovalute sopravviveranno nel formato che conosciamo oggi non possiamo saperlo con certezza.</p>
+                            <p class="text-cyan-200">Quello che è certo è che la Blockchain verrà usata sempre di più. Oggi si sta già studiando come usarla per:</p>
+                            <ul class="list-neat mt-4 text-white">
+                                <li><strong>Votare online</strong> in modo sicuro.</li>
+                                <li><strong>Tracciare la provenienza</strong> del cibo dal campo alla nostra tavola.</li>
+                                <li><strong>Proteggere</strong> le nostre cartelle cliniche in ospedale.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div> <!-- Fine World -->
     </div> <!-- Fine Scaler -->
 
+    <!-- HUD Controlli -->
     <div class="hud">
         <button class="btn-glass" onclick="changeSlide(-1)">
             <i class="fa-solid fa-chevron-left"></i> Indietro
         </button>
         
-        <div class="flex flex-col items-center gap-4" style="pointer-events: auto;">
-            <span id="slide-counter" class="text-xl font-bold tracking-widest text-cyan-200" style="text-shadow: 0 0 15px rgba(0,242,254,0.8);">SLIDE 1 / 8</span>
+        <div class="flex flex-col items-center gap-3" style="pointer-events: auto;">
+            <span id="slide-counter" class="text-sm font-bold tracking-widest text-cyan-200">SLIDE 1 / 11</span>
             <div class="progress-track">
                 <div class="progress-fill" id="progress-bar"></div>
             </div>
@@ -553,31 +505,57 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. MOTORE DI SCALING (Anti-Sbavature)
-        // ==========================================
+        // MOTORE DI SCALING (Anti-Lag / Formattazione)
         const scaler = document.getElementById('scaler');
-        
         function resizePresentation() {
             const scale = Math.min(window.innerWidth / 1600, window.innerHeight / 900) * 0.95;
             scaler.style.transform = `scale(${scale})`;
         }
-        
         window.addEventListener('resize', resizePresentation);
         resizePresentation();
 
-        // ==========================================
-        // 2. GESTIONE SLIDE E SCROLLING
-        // ==========================================
+        // GESTIONE SLIDE E GRAFICI
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
         let currentSlide = 0;
         let isAnimating = false;
+        let chartInst = null;
+
+        Chart.defaults.color = 'rgba(255, 255, 255, 0.9)';
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.font.size = 18;
+
+        function initCharts() {
+            const ctx = document.getElementById('energyChart');
+            if (ctx && !chartInst) {
+                chartInst = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Argentina', 'Bitcoin', 'Svezia'],
+                        datasets: [{
+                            label: 'TWh Consumati',
+                            data: [125, 135, 131],
+                            backgroundColor: ['rgba(59, 130, 246, 0.8)', 'rgba(239, 68, 68, 0.8)', 'rgba(168, 85, 247, 0.8)'],
+                            borderRadius: 12,
+                            borderWidth: 1,
+                            borderColor: 'rgba(255,255,255,0.2)'
+                        }]
+                    },
+                    options: { 
+                        responsive: true, maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } }, 
+                        scales: { x: { grid: { display: false } } },
+                        animation: { duration: 800 } 
+                    }
+                });
+            }
+        }
 
         function updatePresentation() {
             slides.forEach((slide, index) => {
                 if (index === currentSlide) {
                     slide.classList.add('active');
+                    if (index === 8) setTimeout(initCharts, 400); // Inizializza il grafico alla slide 9
                 } else {
                     slide.classList.remove('active');
                 }
@@ -593,29 +571,25 @@
             if (newSlide >= 0 && newSlide < totalSlides) {
                 currentSlide = newSlide;
                 updatePresentation();
-                
                 isAnimating = true;
-                setTimeout(() => { isAnimating = false; }, 1000); 
+                setTimeout(() => { isAnimating = false; }, 600);
             }
         }
 
+        // Tastiera
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter' || e.key === 'PageDown') changeSlide(1);
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') changeSlide(1);
             if (e.key === 'ArrowLeft' || e.key === 'PageUp') changeSlide(-1);
         });
 
+        // Rotellina Mouse
         window.addEventListener('wheel', (e) => {
-            if (e.deltaY > 50) changeSlide(1);
+            if (e.deltaY > 50) changeSlide(1); 
             else if (e.deltaY < -50) changeSlide(-1);
         }, { passive: true });
 
-        // ==========================================
-        // 3. PARALLASSE 3D POTENZIATO
-        // ==========================================
+        // PARALLASSE 3D LEGGERA
         const world = document.getElementById('world');
-        const blobs = [document.getElementById('blob1'), document.getElementById('blob2'), document.getElementById('blob3')];
-        const tiltElements = document.querySelectorAll('.js-tilt');
-
         let ticking = false;
 
         document.addEventListener('mousemove', (e) => {
@@ -623,19 +597,7 @@
                 window.requestAnimationFrame(() => {
                     const x = (e.clientX / window.innerWidth) * 2 - 1;
                     const y = (e.clientY / window.innerHeight) * 2 - 1;
-                    
-                    // Rotazione globale del mondo aumentata drasticamente (da 12 a 25)
-                    world.style.transform = `rotateY(${x * 25}deg) rotateX(${y * -25}deg)`;
-
-                    // Sfalsamento Sfondo
-                    blobs[0].style.transform = `translateZ(-400px) translate(${x * -120}px, ${y * -120}px)`;
-                    blobs[1].style.transform = `translateZ(-500px) translate(${x * -80}px, ${y * -80}px)`;
-                    blobs[2].style.transform = `translateZ(-300px) translate(${x * -180}px, ${y * -180}px)`;
-
-                    tiltElements.forEach(el => {
-                        const baseZ = el.getAttribute('data-z') || 150;
-                        el.style.transform = `translateZ(${baseZ}px) translate(${x * -60}px, ${y * -60}px)`;
-                    });
+                    world.style.transform = `rotateY(${x * 6}deg) rotateX(${y * -6}deg)`;
                     ticking = false;
                 });
                 ticking = true;
@@ -644,15 +606,9 @@
 
         document.addEventListener('mouseleave', () => {
             world.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            blobs[0].style.transform = `translateZ(-400px) translate(0,0)`;
-            blobs[1].style.transform = `translateZ(-500px) translate(0,0)`;
-            blobs[2].style.transform = `translateZ(-300px) translate(0,0)`;
-            tiltElements.forEach(el => {
-                const baseZ = el.getAttribute('data-z') || 150;
-                el.style.transform = `translateZ(${baseZ}px)`;
-            });
         });
 
+        // Avvio
         updatePresentation();
     </script>
 </body>
